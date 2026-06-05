@@ -1,0 +1,542 @@
+/* ============================================================
+   STYLE.CSS — 像素世界 UI 样式
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0a0a1a;
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+  color: #ddd;
+  user-select: none;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#gameCanvas {
+  display: block;
+  image-rendering: pixelated;
+  cursor: crosshair;
+}
+
+/* ── HUD 整体容器 ──────────────────────────────────────────── */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+#hud > * { pointer-events: auto; }
+
+/* ── 顶部工具栏 ────────────────────────────────────────────── */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,0,0,0.75);
+  border-bottom: 1px solid #333;
+  padding: 6px 12px;
+  flex-wrap: wrap;
+}
+
+#speed-controls {
+  display: flex;
+  gap: 4px;
+}
+
+#speed-controls button {
+  background: #1a1a2e;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+#speed-controls button.active {
+  background: #2a6adf;
+  color: #fff;
+  border-color: #4a8aff;
+}
+#speed-controls button:hover {
+  border-color: #666;
+}
+
+#game-time, #quota-timer, #weather-status {
+  font-size: 12px;
+  color: #99b;
+}
+
+#save-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+#save-controls button {
+  background: #1a2a1a;
+  color: #8d8;
+  border: 1px solid #484;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+#save-controls button:hover { background: #2a3a2a; }
+
+/* ── 左侧放置面板 ──────────────────────────────────────────── */
+#placement-panel {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  width: 180px;
+  background: rgba(0,0,0,0.82);
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-bottom-right-radius: 6px;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+#placement-panel h3 {
+  font-size: 11px;
+  color: #88a;
+  padding: 6px 8px 2px;
+  border-bottom: 1px solid #333;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#placement-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 4px 4px 0;
+}
+.tab-btn {
+  flex: 1;
+  background: #111;
+  color: #888;
+  border: 1px solid #333;
+  border-bottom: none;
+  padding: 3px 2px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 2px 2px 0 0;
+  transition: all 0.1s;
+}
+.tab-btn.active {
+  background: #1a1a30;
+  color: #aad;
+  border-color: #446;
+}
+
+#placement-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 4px;
+  border-top: 1px solid #333;
+}
+
+.place-btn {
+  background: #0f0f1f;
+  color: #bbc;
+  border: 1px solid #334;
+  padding: 5px 3px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 3px;
+  text-align: center;
+  line-height: 1.4;
+  transition: all 0.1s;
+}
+.place-btn:hover { background: #1a1a30; border-color: #556; }
+.place-btn.selected {
+  background: #1a2a40;
+  border-color: #4af;
+  color: #4af;
+  box-shadow: 0 0 4px #4af4;
+}
+.place-btn .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+.place-btn small {
+  display: block;
+  color: #667;
+  font-size: 9px;
+}
+
+#quota-display {
+  padding: 4px 6px;
+  font-size: 10px;
+  color: #4af;
+  border-top: 1px solid #222;
+  min-height: 18px;
+}
+
+/* ── 右侧王国面板 ──────────────────────────────────────────── */
+#kingdom-panel {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 220px;
+  background: rgba(0,0,0,0.82);
+  border-left: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-bottom-left-radius: 6px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+#kingdom-panel h3 {
+  font-size: 11px;
+  color: #88a;
+  padding: 6px 8px;
+  border-bottom: 1px solid #333;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.kingdom-row {
+  padding: 5px 8px;
+  border-bottom: 1px solid #1a1a2a;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.kingdom-row:hover { background: rgba(255,255,255,0.05); }
+
+.kingdom-name {
+  font-size: 11px;
+  color: #ccd;
+  font-weight: bold;
+}
+.kingdom-info {
+  font-size: 10px;
+  color: #778;
+  margin-top: 2px;
+}
+.badge {
+  display: inline-block;
+  background: #2a2a4a;
+  color: #88c;
+  border-radius: 2px;
+  padding: 0 3px;
+  font-size: 9px;
+  margin-right: 3px;
+}
+
+.empty-tip {
+  padding: 12px 8px;
+  font-size: 10px;
+  color: #556;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── 底部日志面板 ────────────────────────────────────────────── */
+#log-panel {
+  position: absolute;
+  bottom: 8px;
+  left: 190px;
+  right: 210px;
+  pointer-events: none;
+}
+
+.log-entry {
+  background: rgba(0,0,0,0.7);
+  border-left: 2px solid #446;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #aac;
+  margin-bottom: 2px;
+  border-radius: 0 3px 3px 0;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 模态框（王国详情） ────────────────────────────────────── */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal.hidden { display: none; }
+
+.modal-content {
+  background: #0d0d1f;
+  border: 1px solid #446;
+  border-radius: 6px;
+  padding: 16px 20px;
+  min-width: 320px;
+  max-width: 460px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-content h2 { font-size: 16px; margin-bottom: 10px; }
+.modal-content h3 { font-size: 12px; color: #88a; margin: 10px 0 5px; border-bottom: 1px solid #333; padding-bottom: 2px; }
+.modal-content p  { font-size: 11px; color: #778; }
+
+#modal-close {
+  position: absolute;
+  top: 8px; right: 10px;
+  background: none;
+  border: none;
+  color: #778;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+#modal-close:hover { color: #aac; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  font-size: 11px;
+  color: #99b;
+}
+
+.relation {
+  display: inline-block;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 10px;
+  margin: 2px;
+}
+.relation.war   { border-color: #844; color: #f66; }
+.relation.ally  { border-color: #484; color: #6f6; }
+
+.war-btns { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.war-btn {
+  background: #2a0808;
+  color: #f88;
+  border: 1px solid #844;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.1s;
+}
+.war-btn:hover { background: #400; }
+
+/* ── 滚动条样式 ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0a1a; }
+::-webkit-scrollbar-thumb { background: #334; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #556; }
+
+/* ── 新游戏弹窗 ─────────────────────────────────────────────── */
+.newgame-modal-content {
+  text-align: center;
+  padding: 28px 32px;
+  min-width: 300px;
+  max-width: 380px;
+}
+
+.newgame-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+  animation: spin-slow 6s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.newgame-modal-content h2 {
+  font-size: 18px;
+  color: #ccd;
+  margin-bottom: 8px;
+}
+
+.newgame-desc {
+  font-size: 12px;
+  color: #778;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.newgame-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ng-btn {
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+
+.ng-btn-save {
+  background: #1a2e1a;
+  color: #6f6;
+  border-color: #484;
+}
+.ng-btn-save:hover { background: #254025; border-color: #6f6; }
+
+.ng-btn-danger {
+  background: #2a1010;
+  color: #f88;
+  border-color: #844;
+}
+.ng-btn-danger:hover { background: #3a1515; border-color: #f88; }
+
+.ng-btn-cancel {
+  background: #111;
+  color: #778;
+  border-color: #334;
+}
+.ng-btn-cancel:hover { background: #1a1a2a; color: #99b; }
+
+/* 新游戏生成中的加载遮罩 */
+#loading-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  font-family: 'Courier New', monospace;
+}
+#loading-overlay.hidden { display: none; }
+
+.loading-title {
+  font-size: 22px;
+  color: #aad;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.loading-bar-wrap {
+  width: 260px;
+  height: 8px;
+  background: #1a1a2e;
+  border: 1px solid #446;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #2a6adf, #4af);
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+.loading-hint {
+  font-size: 11px;
+  color: #446;
+  letter-spacing: 1px;
+}
+
+/* ── 地形工具面板 ───────────────────────────────────────────── */
+.terrain-tool-panel {
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terrain-btn {
+  background: #0f1a0f;
+  color: #8d8;
+  border: 1px solid #484;
+  padding: 7px 6px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 3px;
+  text-align: left;
+  line-height: 1.4;
+  transition: all 0.1s;
+}
+.terrain-btn small {
+  display: block;
+  font-size: 9px;
+  color: #556;
+  margin-top: 1px;
+}
+.terrain-btn:hover  { background: #1a2a1a; border-color: #686; }
+.terrain-btn.active { background: #1a3a1a; border-color: #4f4; color: #4f4;
+                      box-shadow: 0 0 5px #4f44; }
+
+.terrain-hint {
+  font-size: 9px;
+  color: #446;
+  padding: 3px 2px;
+  line-height: 1.6;
+  border-top: 1px solid #222;
+}
+
+.terrain-legend {
+  font-size: 9px;
+  line-height: 1.8;
+  padding: 3px 2px;
+  border-top: 1px solid #222;
+}
+
+#brush-size-display {
+  font-size: 10px;
+  color: #4af;
+  padding: 2px 4px;
+}
+
+#tool-mode-display {
+  font-size: 10px;
+  color: #fa4;
+  padding: 2px 4px;
+  font-weight: bold;
+}
+
+/* 地形标签按钮加宽 */
+#placement-tabs { flex-wrap: wrap; }
+#placement-tabs .tab-btn { font-size: 9px; padding: 3px 1px; }
+
+/* ── 键盘提示 ────────────────────────────────────────────────── */
+#key-hints {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 9px;
+  color: #446;
+  line-height: 1.6;
+  pointer-events: none;
+}
