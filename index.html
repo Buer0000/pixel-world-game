@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>像素世界 Pixel World</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="game-container">
+
+  <!-- 主 Canvas -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- ── HUD ── -->
+  <div id="hud">
+
+    <!-- 顶部工具栏 -->
+    <div id="toolbar">
+      <div id="speed-controls">
+        <button id="btn-pause">⏸</button>
+        <button id="btn-1x" class="active">1x</button>
+        <button id="btn-2x">2x</button>
+        <button id="btn-10x">10x</button>
+      </div>
+      <div id="game-time">时间: 00:00:00</div>
+      <div id="weather-status">天气: 晴朗</div>
+      <div id="quota-timer">配额重置: 15分钟</div>
+      <div id="save-controls">
+        <button id="btn-new">🌍 新游戏</button>
+        <button id="btn-save">💾 保存</button>
+        <button id="btn-load">📂 读取</button>
+      </div>
+    </div>
+
+    <!-- 左侧放置面板 -->
+    <div id="placement-panel">
+      <h3>🎮 放置面板</h3>
+      <div id="placement-tabs">
+        <button class="tab-btn active" data-tab="races">种族</button>
+        <button class="tab-btn" data-tab="animals">动物</button>
+        <button class="tab-btn" data-tab="plants">植物</button>
+        <button class="tab-btn" data-tab="events">事件</button>
+        <button class="tab-btn" data-tab="terrain">地形</button>
+      </div>
+      <div id="placement-items"></div>
+      <div id="quota-display"></div>
+    </div>
+
+    <!-- 右侧王国看板 -->
+    <div id="kingdom-panel">
+      <h3>👑 王国一览</h3>
+      <div id="kingdom-list"></div>
+    </div>
+
+    <!-- 底部日志 -->
+    <div id="log-panel"></div>
+
+    <!-- 键盘提示 -->
+    <div id="key-hints">
+      Space 暂停 | 1/2/0 速度 | ESC 取消<br>
+      Ctrl+S 保存 | Ctrl+L 读取<br>
+      Alt+拖拽 平移视角 | 滚轮 缩放<br>
+      地形工具: 长按左键 抬升/降低<br>
+      Shift+长按 反向操作 | 滚轮 调笔刷
+    </div>
+
+  </div><!-- end #hud -->
+
+  <!-- 生成中遮罩 -->
+  <div id="loading-overlay" class="hidden">
+    <div class="loading-title">🌍 生成新世界中...</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar" id="loading-bar" style="width:0%"></div>
+    </div>
+    <div class="loading-hint" id="loading-hint">初始化地形...</div>
+  </div>
+
+  <!-- 新游戏确认弹窗 -->
+  <div id="newgame-modal" class="modal hidden">
+    <div class="modal-content newgame-modal-content">
+      <div class="newgame-icon">🌍</div>
+      <h2>开始新游戏？</h2>
+      <p class="newgame-desc">这将重新生成一片全新的世界。<br>当前进度将会丢失。</p>
+      <div class="newgame-buttons">
+        <button id="ng-save" class="ng-btn ng-btn-save">💾 保存并新建</button>
+        <button id="ng-nosave" class="ng-btn ng-btn-danger">🗑 不保存，直接新建</button>
+        <button id="ng-cancel" class="ng-btn ng-btn-cancel">✕ 取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 王国详情模态框 -->
+  <div id="kingdom-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="modal-close">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+</div><!-- end #game-container -->
+
+<!-- ── 脚本加载顺序（依赖关系从底层到上层）── -->
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/assets/sprites.js"></script>
+
+<!-- 世界 -->
+<script src="js/world/mapGen.js"></script>
+<script src="js/world/weather.js"></script>
+
+<!-- 实体 -->
+<script src="js/entities/entity.js"></script>
+<script src="js/entities/plants.js"></script>
+<script src="js/entities/animals.js"></script>
+<script src="js/entities/races.js"></script>
+
+<!-- 模拟 -->
+<script src="js/simulation/tribe.js"></script>
+<script src="js/simulation/combat.js"></script>
+<script src="js/simulation/simulation.js"></script>
+
+<!-- 渲染 -->
+<script src="js/render/camera.js"></script>
+<script src="js/render/renderer.js"></script>
+
+<!-- UI -->
+<script src="js/ui/placement.js"></script>
+<script src="js/ui/save.js"></script>
+<script src="js/ui/hud.js"></script>
+
+<!-- 启动 -->
+<script src="js/main.js"></script>
+</body>
+</html>
